@@ -1,14 +1,37 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>My Portfolio</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Jim Titus Portfolio</title>
+  <meta name="description" content="Data analytics portfolio: SQL, Python, R and dashboards built on a synthetic health system data warehouse.">
+  <link rel="stylesheet" href="assets/site.css">
 </head>
 <body>
-    <h1>Welcome to My Portfolio</h1>
-    <nav>
-        <a href="powerbi.html">Power BI</a>
-        <a href="r.html">R</a>
-        <a href="sql.html">SQL</a>
-    </nav>
+  <header class="site-header">
+    <div class="inner">
+      <a class="brand" href="index.html">Jim Titus</a>
+      <nav class="site-nav" aria-label="Main">
+        <a href="index.html" aria-current="page">Home</a>
+        <a href="dashboard.html">CICU Dashboard</a>
+        <a href="sql.html">SQL Analysis</a>
+        <a href="python.html">Python</a>
+        <a href="er-diagram.html">ER Diagram</a>
+        <a href="r.html">R Shiny</a>
+      </nav>
+    </div>
+  </header>
+  <main>
+    <h1 class="page-title">Data Analytics Portfolio</h1>
+    <p class="page-sub">A synthetic health system data warehouse, analyzed end to end: Python to load it, SQL to analyze it, and dashboards to present it.</p>
+    <div class="card-grid">
+      <a class="card" href="dashboard.html"><h2>CICU Intake Analysis</h2><p>Interactive dashboard tracking physician admission decisions against the Goldman Algorithm.</p></a>
+      <a class="card" href="sql.html"><h2>SQL Analysis</h2><p>Facility and clinician performance against the Goldman Algorithm.</p></a>
+      <a class="card" href="python.html"><h2>DB Creation (Python)</h2><p>The script that loads the CSVs into the HealthcareWarehouse database.</p></a>
+      <a class="card" href="er-diagram.html"><h2>ER Diagram</h2><p>The star schema behind the synthetic health system data warehouse.</p></a>
+      <a class="card" href="r.html"><h2>R Shiny Dashboards</h2><p>Interactive dashboards built in R Shiny.</p></a>
+    </div>
+  </main>
+  <footer>Built with synthetic data. Hosted on GitHub Pages.</footer>
 </body>
 </html>

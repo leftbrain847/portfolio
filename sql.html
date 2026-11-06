@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SQL Analysis</title>
+  <meta name="description" content="A brief analysis of facility and clinician performance against the Goldman Algorithm.">
+  <link rel="stylesheet" href="assets/site.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/github.min.css" media="(prefers-color-scheme: light)">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/sql.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/python.min.js"></script>
+  <script type="module" src="assets/code-view.js"></script>
+  <script type="module" src="assets/sql-page.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="inner">
+      <a class="brand" href="index.html">Jim Titus</a>
+      <nav class="site-nav" aria-label="Main">
+        <a href="index.html">Home</a>
+        <a href="dashboard.html">CICU Dashboard</a>
+        <a href="sql.html" aria-current="page">SQL Analysis</a>
+        <a href="python.html">Python</a>
+        <a href="er-diagram.html">ER Diagram</a>
+        <a href="r.html">R Shiny</a>
+      </nav>
+    </div>
+  </header>
+  <main>
+    <h1 class="page-title">SQL Analysis</h1>
+    <p class="page-sub">A brief analysis to highlight facility and clinician performance against the Goldman Algorithm</p>
+    <div id="status" class="status" hidden></div>
+    <section class="section">
+      <h2>Analysis.sql (SQL Server)</h2>
+      <pre class="code" data-src="code/Analysis.sql" data-lang="sql"></pre>
+    </section>
+    <section class="card section">
+      <h2>Facility Performance</h2>
+      <div id="facility-results" class="table-wrap"></div>
+    </section>
+    <section class="card section">
+      <h2>Clinician Performance</h2>
+      <div id="clinician-results" class="table-wrap"></div>
+    </section>
+    <p class="note">Results are computed live in your browser by DuckDB from the synthetic data CSVs, using a port of the script above (<a href="queries/base.sql">base.sql</a>, <a href="queries/facility_performance.sql">facility</a>, <a href="queries/clinician_performance.sql">clinician</a>).</p>
+  </main>
+  <footer>Built with synthetic data. Hosted on GitHub Pages.</footer>
+</body>
+</html>

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ER Diagram</title>
+  <meta name="description" content="ER diagram for the synthetic health system data warehouse.">
+  <link rel="stylesheet" href="assets/site.css">
+  <script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@12.2.0/dist/mermaid.esm.min.mjs';
+    const dark = matchMedia('(prefers-color-scheme: dark)').matches;
+    mermaid.initialize({ startOnLoad: true, theme: dark ? 'dark' : 'default' });
+  </script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="inner">
+      <a class="brand" href="index.html">Jim Titus</a>
+      <nav class="site-nav" aria-label="Main">
+        <a href="index.html">Home</a>
+        <a href="dashboard.html">CICU Dashboard</a>
+        <a href="sql.html">SQL Analysis</a>
+        <a href="python.html">Python</a>
+        <a href="er-diagram.html" aria-current="page">ER Diagram</a>
+        <a href="r.html">R Shiny</a>
+      </nav>
+    </div>
+  </header>
+  <main>
+    <h1 class="page-title">ER Diagram</h1>
+    <p class="page-sub">ER diagram for my synthetic health system data warehouse</p>
+    <section class="card diagram">
+<pre class="mermaid">
+erDiagram
+    Date ||--o{ FactCardiacEvents : "Date = IntakeDate"
+    DimComplaint ||--o{ FactCardiacEvents : "ComplaintKey = PresentingComplaint"
+    DimLocation ||--o{ FactCardiacEvents : "LocationCode = Location"
+    DimClinician ||--o{ FactCardiacEvents : "ClinicianID = IntakeClinicianID"
+    DimDx ||--o{ FactCardiacEvents : "DxKey = PrimaryDx"
+    DimDxDomains ||--o{ DimDx : "ValueSetKey = DxValueSetKey"
+
+    FactCardiacEvents {
+        int PatientID
+        int EventCode
+        date IntakeDate FK
+        date AdmissionDate
+        string AdmissionStatus
+        string Location FK
+        string IntakeClinicianID FK
+        string IntakeClinicianName
+        string PresentingComplaint FK
+        string PrimaryDx FK
+        string ClinicianDecision
+        string GoldmanRecommendation
+        int GoldmanStatus
+        float CardiacArrestLikelihood
+        bool CardiacArrestWithin3DaysOfBeingSentHome
+        string CardiacHistory
+        string ConronaryAngiographyReading
+        string ECG
+        string HemodynamicStatus
+        float IntakeClinicianAccuracy
+    }
+    DimClinician {
+        string ClinicianID PK
+        string ClinicianName
+        string ClinicianLocation
+        string LocationCode
+        int Index
+        float LocationSkew
+        float Cat1Skew
+        float Cat2Skew
+        float Cat3Skew
+    }
+    DimComplaint {
+        string ComplaintKey PK
+        string ComplaintDescription
+        string ComplaintValueSetKey
+    }
+    DimLocation {
+        string LocationCode PK
+        string ClinicianLocation
+    }
+    DimDx {
+        string DxKey PK
+        string DxDescription
+        string DxValueSetKey FK
+    }
+    DimDxDomains {
+        string ValueSetKey PK
+        string ValueSetDescription
+    }
+    Date {
+        date Date PK
+        int DateInt
+        int DayInWeek
+        int DayOfMonth
+        string DayOfWeekName
+        string FY
+        string MonthInCalendar
+        string MonthName
+        int MonthnYear
+        int MonthOfYear
+        string QuarterInCalendar
+        int QuarternYear
+        int QuarterOfYear
+        string ShortYear
+        int WeekNumber
+        date WeekEnding
+        string Year
+    }
+</pre>
+    </section>
+  </main>
+  <footer>Built with synthetic data. Hosted on GitHub Pages.</footer>
+</body>
+</html>

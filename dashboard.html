@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CICU Intake Analysis</title>
+  <meta name="description" content="Tracking physician admission decisions against the Goldman Algorithm for CICU patients.">
+  <link rel="stylesheet" href="assets/site.css">
+  <script src="https://cdn.jsdelivr.net/npm/echarts@6.1.0/dist/echarts.min.js"></script>
+  <script type="module" src="assets/dashboard.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="inner">
+      <a class="brand" href="index.html">Jim Titus</a>
+      <nav class="site-nav" aria-label="Main">
+        <a href="index.html">Home</a>
+        <a href="dashboard.html" aria-current="page">CICU Dashboard</a>
+        <a href="sql.html">SQL Analysis</a>
+        <a href="python.html">Python</a>
+        <a href="er-diagram.html">ER Diagram</a>
+        <a href="r.html">R Shiny</a>
+      </nav>
+    </div>
+  </header>
+  <main>
+    <h1 class="page-title">CICU Intake Analysis</h1>
+    <p class="page-sub">Tracking physician admission decisions against the Goldman Algorithm* for CICU (Cardiac Intensive Care Unit) patients</p>
+    <div id="status" class="status" hidden></div>
+    <div class="filters">
+      <label>Location<select id="f-location"><option value="">All</option></select></label>
+      <label>Intake Clinician Name<select id="f-clinician"><option value="">All</option></select></label>
+      <label>Decision Alignment<select id="f-alignment"><option value="">All</option></select></label>
+    </div>
+    <div class="dash-grid">
+      <section class="card"><h2>Outcomes by Clinician Decision and Goldman Recommendation</h2><div id="outcome-chart" class="chart" role="img" aria-label="Stacked bar chart of patient outcomes by decision"></div></section>
+      <section class="card"><h2>Alignment with Goldman Recommendation</h2><div id="alignment-gauge" class="chart" role="img" aria-label="Gauge showing share of clinician decisions that match the Goldman recommendation"></div><p class="note" id="target-label" style="text-align:center;margin:0"></p></section>
+    </div>
+    <section class="card section">
+      <h2>Patients <span class="note" id="patient-count"></span></h2>
+      <div id="patient-table" class="table-wrap"></div>
+    </section>
+    <p class="note">*The Goldman Algorithm is a diagnostic decision tree used to determine the best course of action for patients exhibiting chest pain or shortness of breath. This dashboard tracks physician intake decisions against Goldman to assess and improve performance. All patient data is synthetic.</p>
+  </main>
+  <footer>Built with synthetic data. Hosted on GitHub Pages.</footer>
+</body>
+</html>
