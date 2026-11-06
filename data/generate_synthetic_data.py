@@ -4,6 +4,7 @@ Run from the repo root:  python3 data/generate_synthetic_data.py
 Standard library only. Seeded, so every run produces the same files.
 """
 import csv
+import math
 import random
 from datetime import date, timedelta
 from pathlib import Path
@@ -11,7 +12,7 @@ from pathlib import Path
 random.seed(847)
 OUT = Path(__file__).parent
 
-# Patients per hospital and each hospital's typical alignment with Goldman
+# Patients per hospital and each hospital's typical clinician skill (drives alignment with Goldman)
 LOCATIONS = {
     'Hospital A': (333, 0.92), 'Hospital B': (376, 0.88), 'Hospital C': (120, 0.93),
     'Hospital D': (449, 0.94), 'Hospital E': (359, 0.81), 'Hospital F': (985, 0.86),
@@ -46,6 +47,30 @@ OTHER_DX = [('DX120', 'Migraine, unspecified', 'VS210'), ('DX205', 'Gastritis, u
 VALUE_SETS = [('VS507', 'Cardiovascular Distress'), ('VS519', 'Respiratory Distress'),
               ('VS210', 'Neurological'), ('VS211', 'Gastrointestinal')]
 
+# Goldman inputs. Structure follows Goldman et al., NEJM 1996;334:1498: ECG suggesting acute MI,
+# other ischemic ECG changes, and "urgent factors" (low systolic BP, rales above the bases,
+# worsening known ischemic heart disease). Group cut-offs and risks below are simplified.
+ECG_FINDINGS = ['Normal', 'Ischemic changes', 'ST elevation or Q waves']
+HISTORY = ['None', 'Known CAD, stable', 'Known CAD, worsening']
+GROUP_RISK = {1: 0.01, 2: 0.04, 3: 0.10, 4: 0.25}  # Goldman's estimated arrest risk per group
+ADMIT_THRESHOLD = 0.07  # risk at which a clinician admits
+
+
+def goldman_risk_group(ecg, urgent):
+    if ecg == 'ST elevation or Q waves':
+        return 4 if urgent >= 1 else 3
+    if ecg == 'Ischemic changes':
+        return 3 if urgent >= 1 else 2
+    return 2 if urgent >= 2 else 1
+
+
+def logit(p):
+    return math.log(p / (1 - p))
+
+
+def expit(x):
+    return 1 / (1 + math.exp(-x))
+
 
 def write(name, header, rows):
     with open(OUT / f'{name}.csv', 'w', newline='') as f:
@@ -79,14 +104,26 @@ for loc, (n, _) in LOCATIONS.items():
         complaint = random.choices(COMPLAINTS, weights=[45, 15, 30, 5, 5])[0]
         intake = start + timedelta(days=random.randrange(366))
 
-        # Goldman: higher risk -> Admit. Arrest risk depends on Goldman's risk tier.
-        goldman_status = random.choices([1, 2, 3, 4], weights=[25, 20, 30, 25])[0]
-        goldman = 'Admit' if goldman_status >= 3 else 'Send Home'
-        likelihood = round(random.uniform(0.55, 0.8) if goldman == 'Admit' else random.uniform(0.01, 0.07), 3)
-        arrest = random.random() < likelihood
+        # --- What the clinician sees at intake (the Goldman inputs) ---
+        ecg = random.choices(ECG_FINDINGS, weights=[70, 22, 8])[0]
+        abnormal_ecg = ecg != 'Normal'
+        low_sbp = random.random() < (0.20 if abnormal_ecg else 0.08)       # systolic BP < 110
+        rales = random.random() < (0.18 if abnormal_ecg else 0.06)         # rales above the bases
+        history = random.choices(HISTORY, weights=[55, 30, 15 + 15 * abnormal_ecg])[0]
+        urgent = low_sbp + rales + (history == 'Known CAD, worsening')
 
-        aligned = random.random() < doc['skill']
-        decision = goldman if aligned else ('Send Home' if goldman == 'Admit' else 'Admit')
+        # --- Goldman: ECG finding x number of urgent factors -> risk group 1-4 ---
+        group = goldman_risk_group(ecg, urgent)
+        goldman = 'Admit' if group >= 3 else 'Send Home'
+
+        # --- What actually happens: Goldman's risk plus severity it can't see ---
+        hidden = random.gauss(0, 1)
+        arrest = random.random() < expit(logit(GROUP_RISK[group]) + 1.1 * hidden)
+
+        # --- Clinician: same inputs, partial read on hidden severity, plus noise ---
+        noise = random.gauss(0, (1 - doc['skill']) * 9)
+        perceived = logit(GROUP_RISK[group]) + 0.4 * hidden + noise
+        decision = 'Admit' if perceived > logit(ADMIT_THRESHOLD) else 'Send Home'
         admitted = decision == 'Admit'
 
         if complaint[0] not in ('C937', 'C941', 'C446'):
@@ -109,15 +146,14 @@ for loc, (n, _) in LOCATIONS.items():
             'PrimaryDx': primary_dx,
             'ClinicianDecision': decision,
             'GoldmanRecommendation': goldman,
-            'GoldmanStatus': goldman_status,
-            'CardiacArrestLikelihood': likelihood,
+            'GoldmanStatus': group,
+            'CardiacArrestLikelihood': GROUP_RISK[group],
             'CardiacArrestWithin3DaysOfBeingSentHome': int(arrest and not admitted),
-            'CardiacHistory': random.choices(['Yes', 'No'], weights=[goldman_status, 4])[0],
-            'ConronaryAngiographyReading': random.choices(['Normal', 'Mild', 'Moderate', 'Severe'],
-                                                          weights=[5 - goldman_status, 3, goldman_status, goldman_status])[0],
-            'ECG': random.choices(['Normal', 'ST Elevation', 'ST Depression', 'Arrhythmia'],
-                                  weights=[6 - goldman_status, goldman_status, goldman_status, 1])[0],
-            'HemodynamicStatus': 'Unstable' if goldman_status == 4 and random.random() < 0.6 else 'Stable',
+            'CardiacHistory': history,
+            'ConronaryAngiographyReading': (random.choices(['Normal', 'Non-obstructive CAD', 'Obstructive CAD'],
+                                                           weights=[3, 2, 1 + 4 * arrest])[0] if admitted else ''),
+            'ECG': ecg,
+            'HemodynamicStatus': ' + '.join(x for x, on in [('SBP < 110', low_sbp), ('Rales above bases', rales)] if on) or 'Stable',
             'IntakeClinicianAccuracy': round(doc['skill'], 3),
         })
 
