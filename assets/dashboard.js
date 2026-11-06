@@ -17,7 +17,7 @@ const barEl = document.getElementById('outcome-chart');
 const gaugeEl = document.getElementById('alignment-gauge');
 const tableEl = document.getElementById('patient-table');
 const countEl = document.getElementById('patient-count');
-let bar, gauge, lastData;
+let bar, gauge, lastData, requestId = 0;
 
 const css = (name) => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
 
@@ -39,6 +39,7 @@ async function populateFilters() {
 }
 
 async function refresh() {
+  const id = ++requestId; // ignore results from older requests that finish late
   const where = whereClause();
   const [outcomes, [align], patients] = await Promise.all([
     // Share of each outcome within each decision, for both decision makers
@@ -58,6 +59,7 @@ async function refresh() {
       FROM ClinicianPerformance ${where}
       ORDER BY Location, ClinicianName, PatientID`),
   ]);
+  if (id !== requestId) return;
   lastData = { outcomes, align };
   drawCharts();
   countEl.textContent = `${patients.length.toLocaleString()} patients`;
