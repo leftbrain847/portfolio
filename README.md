@@ -14,7 +14,7 @@ Data analytics portfolio built on a synthetic health system data warehouse. A pl
 
 | Path | What |
 |---|---|
-| `code/` | Original project code: `Analysis.sql` (SQL Server) and `create_db.py` |
+| `code/` | Original project code: `Analysis.sql` (SQL Server, transcribed from the original Power BI report; swap in the source `.sql` if found) and `create_db.py` |
 | `queries/` | DuckDB versions of the analysis, run live on the site |
 | `data/` | Synthetic data CSVs (see `data/README.md`) |
 | `assets/` | Site CSS and JavaScript |
