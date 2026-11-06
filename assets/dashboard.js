@@ -86,7 +86,7 @@ function drawCharts() {
     animationDuration: 300,
     textStyle: { fontFamily: css('--font') },
     legend: { top: 0, left: 0, icon: 'roundRect', itemWidth: 12, itemHeight: 12, textStyle: { color: text2 } },
-    grid: { top: 36, left: 44, right: 8, bottom: 52 },
+    grid: { top: 36, left: 44, right: 8, bottom: 64 },
     tooltip: {
       trigger: 'item',
       formatter: (p) => {
@@ -96,7 +96,7 @@ function drawCharts() {
     },
     xAxis: [
       { type: 'category', data: cats.map((c) => c.d), axisTick: { show: false }, axisLine: { lineStyle: { color: border } }, axisLabel: { color: text, interval: 0, width: 64, overflow: 'break' } },
-      { type: 'category', position: 'bottom', offset: 22, data: groups, axisLine: { show: false }, axisTick: { show: false }, axisLabel: { color: text2, fontSize: 12 } },
+      { type: 'category', position: 'bottom', offset: 34, data: groups, axisLine: { show: false }, axisTick: { show: false }, axisLabel: { color: text2, fontSize: 12 } },
     ],
     yAxis: {
       type: 'value', max: 1, interval: 0.5,

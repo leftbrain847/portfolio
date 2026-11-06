@@ -1,0 +1,6 @@
+ComplaintKey,ComplaintDescription,ComplaintValueSetKey
+C937,Chest pain or discomfort,VS301
+C941,Palpitations or irregular heartbeat,VS301
+C446,Shortness of breath,VS302
+C212,Headache,VS310
+C318,Abdominal pain,VS311

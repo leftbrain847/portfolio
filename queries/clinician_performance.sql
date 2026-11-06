@@ -1,7 +1,7 @@
 -- DuckDB port of "Analyzing Clinician Performance" in code/Analysis.sql
 SELECT
     ClinicianName,
-    SUM(DecisionDenominator) AS PatientsEncountered,
+    CAST(SUM(DecisionDenominator) AS INTEGER) AS PatientsEncountered,
     ROUND(SUM(DecisionAlignment) / SUM(DecisionDenominator), 2) AS AlignmentQuotient,
     ROUND(SUM(CardiacArrestWithin3DaysOfBeingSentHome) / SUM(ClinicianDenominator), 2) AS ClinicianError,
     ROUND(SUM(GoldmanNumerator) / SUM(GoldmanDenominator), 2) AS GoldmanError,

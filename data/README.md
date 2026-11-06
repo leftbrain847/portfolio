@@ -1,13 +1,20 @@
 # Synthetic data
 
-Put the synthetic data warehouse CSVs here. File name = table name (same rule as `code/create_db.py`):
+CSVs for the synthetic health system data warehouse. File name = table name (same rule as `code/create_db.py`).
 
-| File | Used for |
+Regenerate them with:
+
+```sh
+python3 data/generate_synthetic_data.py
+```
+
+| File | Contents |
 |---|---|
 | `FactCardiacEvents.csv` | One row per patient intake |
-| `DimClinician.csv` | Clinician names (`ClinicianID` → `ClinicianName`) |
-| `DimComplaint.csv` | Presenting complaint descriptions |
-| `DimDx.csv` | Primary diagnosis descriptions |
+| `DimClinician.csv` | Clinicians and their hospital |
+| `DimLocation.csv` | Hospitals |
+| `DimComplaint.csv` | Presenting complaints |
+| `DimDx.csv` | Diagnoses |
 | `DimDxDomains.csv` | Diagnosis value sets |
 
-The SQL and dashboard pages load these in the browser with DuckDB; nothing else needs to be built.
+The SQL and dashboard pages load these in the browser with DuckDB; nothing needs to be built.

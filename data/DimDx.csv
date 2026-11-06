@@ -1,0 +1,7 @@
+DxKey,DxDescription,DxValueSetKey
+DX341,"Cardiac arrest, unspecified",VS507
+DX342,Ventricular fibrillation,VS507
+DX343,Pulseless electrical activity,VS507
+DX344,Acute transmural myocardial infarction,VS519
+DX120,"Migraine, unspecified",VS210
+DX205,"Gastritis, unspecified",VS211
