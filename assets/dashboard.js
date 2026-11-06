@@ -96,7 +96,7 @@ function drawCharts() {
     },
     xAxis: [
       { type: 'category', data: cats.map((c) => c.d), axisTick: { show: false }, axisLine: { lineStyle: { color: border } }, axisLabel: { color: text, interval: 0, width: 64, overflow: 'break' } },
-      { type: 'category', position: 'bottom', offset: 34, data: groups, axisLine: { show: false }, axisTick: { show: false }, axisLabel: { color: text2, fontSize: 12 } },
+      { type: 'category', position: 'bottom', offset: 34, data: groups, axisLine: { show: false }, axisTick: { show: false }, axisLabel: { color: text2, fontSize: 12, interval: 0, width: 120, overflow: 'break' } },
     ],
     yAxis: {
       type: 'value', max: 1, interval: 0.5,

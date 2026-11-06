@@ -1,4 +1,6 @@
-# jimtitusportfolio.com
+# Jim Titus — Data Analytics Portfolio
+
+Live at https://leftbrain847.github.io/portfolio/
 
 Data analytics portfolio built on a synthetic health system data warehouse. A plain static site served by GitHub Pages: no build step, no paid tools.
 
