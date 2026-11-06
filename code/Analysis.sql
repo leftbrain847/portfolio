@@ -1,7 +1,3 @@
--- NOTE: transcribed from a screenshot of the original SSMS script (Power BI page 2).
--- Replace this file with the original .sql when available. Lines marked [cut off]
--- were truncated at the right edge of the screenshot.
-
 USE HealthcareWarehouse
 
 /*************************************************************************************************
@@ -39,7 +35,7 @@ FROM [HealthcareWarehouse].[dbo].[FactCardiacEvents] F
 	LEFT JOIN DBO.DimDxDomains DD
 		ON DX.DxValueSetKey = DD.ValueSetKey
 WHERE
-	(DX.DxKey IS NULL OR DX.DxKey IN ('DX341', 'DX342', 'DX343', 'DX344')) -- Filtering on 'Cardiac arrest, unspecified', 'Ventricular fibrillation', 'Pulseless electrical [cut off]
+	(DX.DxKey IS NULL OR DX.DxKey IN ('DX341', 'DX342', 'DX343', 'DX344')) -- Filtering on 'Cardiac arrest, unspecified', 'Ventricular fibrillation', 'Pulseless electrical activity', 'Acute transmural myocardial infarction'
 	AND (DX.DxValueSetKey IS NULL OR DX.DxValueSetKey IN ('VS507', 'VS519')) -- Filtering on 'Cardiovascular Distress', 'Respiratory Distress'
 
 /*************************************************************************************************
